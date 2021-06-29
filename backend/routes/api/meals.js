@@ -8,81 +8,42 @@ const Meal = require('../../models/Meal');
 // @route   GET api/meal
 // @desc    If the date is present, fetch meal on said date. 
 //          Otherwise, fetch the latest 5 meals for a user. Format for 
-//          dates should be ISO8601 string representation with optional timezone offset 
-//          ( ex: 2018-09-01T12:30:00-05:00 ).
+//          dates should be simple date string using dashes (no time) ex: 2018-09-22
 // @access  Private
 router.get('/', auth, async (req, res) => {
     
     const {keywords, date} = req.query;
 
+    console.log(date);
+
     try {
         let meals;
         if (keywords && date) {
-            const searchDate = new Date(date);
+            const dateArray = date.split('-'); // Year, Month, Day
+            const startDate = new Date(dateArray[0], parseInt(dateArray[1]) - 1, dateArray[2]);
+            const endDate = new Date(dateArray[0], parseInt(dateArray[1]) - 1, parseInt(dateArray[2]) + 1);
+
             meals = await Meal.find({
                     user: req.user.id, 
                     $text: {$search: keywords},
-                    $or: [{
-                            $and: [{
-                                    startDate: {
-                                        $lte: endDate
-                                    }
-                                },
-                                {
-                                    startDate: {
-                                        $gte: startDate
-                                    }
-                                }
-                            ]
-                        },
-                        {
-                            $and: [{
-                                    endDate: {
-                                        $lte: endDate
-                                    }
-                                },
-                                {
-                                    endDate: {
-                                        $gte: startDate
-                                    }
-                                }
-                            ]
-                        },
-                    ]
+                    mealTime: {
+                        $gte: startDate, 
+                        $lt: endDate
+                    }
                 })
                 .sort({mealTime: 'desc'});
         }
         else if (date) {
-            const searchDate = new Date(date);
+            const dateArray = date.split('-'); // Year, Month, Day
+            const startDate = new Date(dateArray[0], parseInt(dateArray[1]) - 1, dateArray[2]);
+            const endDate = new Date(dateArray[0], parseInt(dateArray[1]) - 1, parseInt(dateArray[2]) + 1);
+
             meals = await Meal.find({
                     user: req.user.id, 
-                    $or: [{
-                            $and: [{
-                                    startDate: {
-                                        $lte: endDate
-                                    }
-                                },
-                                {
-                                    startDate: {
-                                        $gte: startDate
-                                    }
-                                }
-                            ]
-                        },
-                        {
-                            $and: [{
-                                    endDate: {
-                                        $lte: endDate
-                                    }
-                                },
-                                {
-                                    endDate: {
-                                        $gte: startDate
-                                    }
-                                }
-                            ]
-                        },
-                    ]
+                    mealTime: {
+                        $gte: startDate, 
+                        $lt: endDate
+                    }
                 })
                 .sort({mealTime: 'desc'});
 
@@ -166,6 +127,8 @@ async (req, res) => {
         // Add optional fields
         if (desc) 
             mealFields.desc = desc; 
+        if (portions.length > 0) 
+            mealFields.portions = portions; 
 
         let meal;
 

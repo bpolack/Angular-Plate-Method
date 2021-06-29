@@ -1,7 +1,7 @@
 {
-  "name": "ascent-tracker-backend",
+  "name": "plate-method-api",
   "version": "1.0.0",
-  "description": "Backend REST API for the time tracker.",
+  "description": "Backend REST API for a meal tracker.",
   "main": "app.js",
   "scripts": {
     "start": "node app",
