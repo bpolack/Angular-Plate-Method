@@ -1,0 +1,31 @@
+.button {
+    padding: 10px 24px;
+    margin: 5px;
+    border: 1px solid transparent;
+    border-radius: 24px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1em;
+    font-weight: 200;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+    color: #fff;
+    background-color: #000;
+    transition: 0.2s ease all;
+
+    &--color {
+        color: #fff;
+        background-color: #788BFF;
+    }
+
+    &:hover {
+        border: 1px solid #788BFF;
+        color: #788BFF;
+        background-color: transparent;
+    }
+    &--active {
+        border: 1px solid #788BFF;
+        color: #788BFF;
+        background-color: transparent;
+    }
+}

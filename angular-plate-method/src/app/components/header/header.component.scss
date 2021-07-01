@@ -1,0 +1,19 @@
+.header {
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+
+    &__title-link {
+        text-decoration: none;
+        color: inherit;
+    }
+
+    &__title {
+        margin: 0 20px 0 0;
+        font-size: 1.5em;
+    }
+
+    &__navigation {
+        margin-left: auto;
+    }
+}
